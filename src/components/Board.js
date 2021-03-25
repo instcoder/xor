@@ -33,13 +33,15 @@ function Board(props) {
       triple.map((el) => currBoard[el])
     );
 
-    let count = (arr) => {
-      let sign = state.move % 2 == 0 ? "0" : "X";
+    let count = (arr, sign) => {
       let comparedArr = arr.filter((item) => item == sign);
       return comparedArr.length;
     };
 
-    let result = currField.filter((triple) => count(triple) == 3);
+    let result = currField.filter(
+      (triple) => count(triple, "X") == 3 || count(triple, "0") == 3
+    );
+    if (result.length > 0) console.log("Победил" + result[0][0]);
     return result;
     // if (result.length && !state.isGameOver) {
     //   let newWinner = result[0][0]
@@ -50,11 +52,13 @@ function Board(props) {
     // }
   }
 
+  useEffect(() => checkForWin(state.battleField));
+
   function ticTacer(i) {
     // let newMass = [...state.history[state.history.length - 1]];
     let newField = [...state.battleField];
 
-    if (checkForWin(state.battleField).length == 1) {
+    if (checkForWin(state.battleField).length) {
       console.log("ty ne projdesh!");
       return;
     }
